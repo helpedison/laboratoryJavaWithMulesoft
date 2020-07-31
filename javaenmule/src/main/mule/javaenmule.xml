@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0442a3a3-49f6-4237-b18d-b5b6c2b3ab46" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	
+   
+	
+	<flow name="javaenmuleFlow1" doc:id="eb19eb76-c911-4dbf-9155-1a0976a0b905" >
+		<http:listener doc:name="Listener" doc:id="3143300d-10df-4234-849e-e3fbaa551540" config-ref="HTTP_Listener_config" path="/java"/>
+		<java:invoke-static method="add(int,int)" doc:name="Invoke static" doc:id="e146bfdb-91a3-457b-af12-8d4dafa43454" class="com.me.Demo">
+			<java:args ><![CDATA[#[%dw 2.0 
+output application/json
+---
+{
+	arg0:1,
+	arg1:2
+	
+}]]]></java:args>
+		</java:invoke-static>
+		<ee:transform doc:name="Transform Message" doc:id="4210f58e-1a2c-433e-b004-9074e763861f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="17012e45-3fce-461f-a149-8fa6ed898a2a" message='#["Hello word"]'/>
+		 
+		 
+	 
+			
+	</flow>
+</mule>
